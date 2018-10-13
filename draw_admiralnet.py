@@ -155,9 +155,9 @@ if __name__ == '__main__':
 
     ############################
     # conv layers
-    size_list = [(32, 32), (18, 18), (10, 10), (6, 6), (4, 4), (2, 2)]
-    num_list = [3, 32, 32, 48, 48, 48]
-    x_diff_list = [layer_width, layer_width, layer_width, layer_width, layer_width, layer_width]
+    size_list = [(66, 200), (31, 98), (14, 47), (5, 22), (3, 20), (1, 18)]
+    num_list = [2, 24, 36, 48, 64, 64]
+    x_diff_list = 2*np.array((200, 98, 47, 22, 20, 18)) + layer_width
     text_list = ['Inputs'] + ['Feature\nmaps'] * (len(size_list) - 1)
     loc_diff_list = [[3, -3]] * len(size_list)
 
@@ -183,9 +183,9 @@ if __name__ == '__main__':
     # in between layers
     start_ratio_list = [[0.4, 0.5], [0.4, 0.8], [0.4, 0.5], [0.4, 0.8], [0.4, 0.8]]
     end_ratio_list = [[0.4, 0.5], [0.4, 0.8], [0.4, 0.5], [0.4, 0.8], [0.4, 0.8]]
-    patch_size_list = [(5, 5), (2, 2), (5, 5), (2, 2), (5, 5)]
+    patch_size_list = [(5, 5), (5, 5), (3, 3), (3, 3), (3, 3)]
     ind_bgn_list = range(len(patch_size_list))
-    text_list = ['Convolution', 'Max-pooling', 'Convolution', 'Max-pooling', 'Convolution']
+    text_list = ['Convolution', 'Convolution', 'Convolution', 'Convolution', 'Convolution']
 
     for ind in range(len(patch_size_list)):
         add_mapping(
@@ -199,14 +199,14 @@ if __name__ == '__main__':
 
     ############################
     # fully connected layers
-    '''
-    size_list = [(fc_unit_size, fc_unit_size)] * 3
-    num_list = [768, 500, 2]
+    num_fc_layers=1
+    size_list = [(fc_unit_size, fc_unit_size)] * num_fc_layers
+    num_list = [768]
     num_show_list = list(map(min, num_list, [NumFcMax] * len(num_list)))
-    x_diff_list = [sum(x_diff_list) + layer_width, layer_width, layer_width]
+    x_diff_list = [sum(x_diff_list) + layer_width, layer_width]
     top_left_list = np.c_[np.cumsum(x_diff_list), np.zeros(len(x_diff_list))]
     loc_diff_list = [[fc_unit_size, -fc_unit_size]] * len(top_left_list)
-    text_list = ['Hidden\nunits'] * (len(size_list) - 1) + ['Outputs']
+    text_list =  ['Deep Features']
 
     for ind in range(len(size_list)):
         if flag_omit:
@@ -224,11 +224,11 @@ if __name__ == '__main__':
         label(top_left_list[ind], text_list[ind] + '\n{}'.format(
             num_list[ind]))
 
-    text_list = ['Flatten\n', 'Fully\nconnected', 'Fully\nconnected']
+    text_list = ['Flatten\n', 'Deep Feature Vector']
 
     for ind in range(len(size_list)):
         label(top_left_list[ind], text_list[ind], xy_off=[-10, -65])
-    '''
+
     ############################
     for patch, color in zip(patches, colors):
         patch.set_color(color * np.ones(3))
